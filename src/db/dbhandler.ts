@@ -101,7 +101,8 @@ export async function testGet(body: typeof requestGetOffers) {
   LIMIT ${body.pageSize} 
   `;
   console.log("body: ", body);
-  if (body.minNumberSeats === undefined) {
+  console.log("type of minNumberSeats: ", typeof body.minNumberSeats);
+  if (body.minNumberSeats === "undefined") {
     matchingOffers.replace(`AND number_seats >= ${body.minNumberSeats}`, "");
   }
   if (body.minPrice === undefined) {
