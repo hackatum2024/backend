@@ -145,9 +145,6 @@ export async function testGet(body: typeof requestGetOffers) {
     raw: true,
   });
 
-  console.log("##################");
-  console.log(offers);
-
   return {
     offers: offers,
     priceRanges: [],
