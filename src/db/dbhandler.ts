@@ -88,39 +88,39 @@ export async function cleanUp() {
 export async function testGet(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
   // Create the base query
-  let matchingOffers = `SELECT * FROM rental_offers WHERE mostSpecificRegionID = ANY(ARRAY[${regionIds}])`;
+  let matchingOffers = `SELECT * FROM rental_offers WHERE "mostSpecificRegionID" = ANY(ARRAY[${regionIds}])`;
 
   // Dynamically add filters only if they are defined
   if (body.timeRangeStart !== undefined) {
-    matchingOffers += ` AND startDate >= ${body.timeRangeStart}`;
+    matchingOffers += ` AND "startDate" >= ${body.timeRangeStart}`;
   }
 
   if (body.timeRangeEnd !== undefined) {
-    matchingOffers += ` AND endDate <= ${body.timeRangeEnd}`;
+    matchingOffers += ` AND "endDate" <= ${body.timeRangeEnd}`;
   }
 
   if (body.minNumberSeats !== undefined) {
-    matchingOffers += ` AND numberSeats >= ${body.minNumberSeats}`;
+    matchingOffers += ` AND "numberSeats" >= ${body.minNumberSeats}`;
   }
 
   if (body.minPrice !== undefined) {
-    matchingOffers += ` AND price >= ${body.minPrice}`;
+    matchingOffers += ` AND "price" >= ${body.minPrice}`;
   }
 
   if (body.maxPrice !== undefined) {
-    matchingOffers += ` AND price <= ${body.maxPrice}`;
+    matchingOffers += ` AND "price" <= ${body.maxPrice}`;
   }
 
   if (body.carType !== undefined) {
-    matchingOffers += ` AND carType = '${body.carType}'`;
+    matchingOffers += ` AND "carType" = '${body.carType}'`;
   }
 
   if (body.onlyVollkasko !== undefined) {
-    matchingOffers += ` AND hasVollkasko = ${body.onlyVollkasko}`;
+    matchingOffers += ` AND "hasVollkasko" = ${body.onlyVollkasko}`;
   }
 
   if (body.minFreeKilometer !== undefined) {
-    matchingOffers += ` AND freeKilometers >= ${body.minFreeKilometer}`;
+    matchingOffers += ` AND "freeKilometers" >= ${body.minFreeKilometer}`;
   }
 
   // Add ordering, pagination, and final parts of the query
