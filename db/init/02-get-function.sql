@@ -22,10 +22,16 @@ WITH filtered_offers AS (
         ro."mostSpecificRegionID" = ANY(p_region_ids)
         -- internally we store the start and end date as TIMESTAMP
         -- that's why we also need to convert the raw ms to it
-        AND ro."startDate" >= to_timestamp(p_time_range_start / 1000.0)
-        AND ro."endDate" <= to_timestamp(p_time_range_end / 1000.0)
+        AND ro."startDate" >= to_timestamp(p_time_range_start::double precision / 1000)
+        AND ro."endDate" <= to_timestamp(p_time_range_end::double precision / 1000)
         -- get the number of seconds of the difference
-        AND EXTRACT(EPOCH FROM (ro."endDate" - ro."startDate"))::integer / 86400 = p_number_days 
+        AND (
+            EXTRACT(EPOCH FROM (
+                date_trunc('day', ro."endDate") - 
+                date_trunc('day', ro."startDate")
+            ))::integer / 86400
+        ) = p_number_days 
+
         -- Optional filters
         AND (p_min_number_seats IS NULL OR ro."numberSeats" >= p_min_number_seats)
         AND (p_min_price IS NULL OR ro.price >= p_min_price)
