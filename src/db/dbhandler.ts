@@ -87,43 +87,54 @@ export async function cleanUp() {
 
 export async function testGet(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
-  const matchingOffers = `SELECT * FROM rental_offers 
-  WHERE most_specific_region_id = ANY(ARRAY[${regionIds}])  
-  AND start_date >= ${body.timeRangeStart}
-  AND end_date <= ${body.timeRangeEnd}
-  AND number_seats >= ${body.minNumberSeats}
-  AND price >= ${body.minPrice}
-  AND price <= ${body.maxPrice}
-  AND car_type = ${body.carType}
-  AND has_vollkasko = ${body.onlyVollkasko}
-  AND free_kilometers >= ${body.minFreeKilometer}
-  ORDER BY ${body.sortOrder}
-  LIMIT ${body.pageSize} 
-  `;
-  console.log("body: ", body);
-  console.log("type of minNumberSeats: ", typeof body.minNumberSeats);
-  if (body.minNumberSeats === "undefined") {
-    matchingOffers.replace(`AND number_seats >= ${body.minNumberSeats}`, "");
+  // Create the base query
+  let matchingOffers = `SELECT * FROM rental_offers WHERE most_specific_region_id = ANY(ARRAY[${regionIds}])`;
+
+  // Dynamically add filters only if they are defined
+  if (body.timeRangeStart !== undefined) {
+    matchingOffers += ` AND start_date >= '${body.timeRangeStart}'`;
   }
-  if (body.minPrice === undefined) {
-    matchingOffers.replace(`AND price >= ${body.minPrice}`, "");
+
+  if (body.timeRangeEnd !== undefined) {
+    matchingOffers += ` AND end_date <= '${body.timeRangeEnd}'`;
   }
-  if (body.maxPrice === undefined) {
-    matchingOffers.replace(`AND price <= ${body.maxPrice}`, "");
+
+  if (body.minNumberSeats !== undefined) {
+    matchingOffers += ` AND number_seats >= ${body.minNumberSeats}`;
   }
-  if (body.carType === undefined) {
-    matchingOffers.replace(`AND car_type = ${body.carType}`, "");
+
+  if (body.minPrice !== undefined) {
+    matchingOffers += ` AND price >= ${body.minPrice}`;
   }
-  if (body.onlyVollkasko === undefined) {
-    matchingOffers.replace(`AND has_vollkasko = ${body.onlyVollkasko}`, "");
+
+  if (body.maxPrice !== undefined) {
+    matchingOffers += ` AND price <= ${body.maxPrice}`;
   }
-  if (body.minFreeKilometer === undefined) {
-    matchingOffers.replace(
-      `AND free_kilometers >= ${body.minFreeKilometer}`,
-      ""
-    );
+
+  if (body.carType !== undefined) {
+    matchingOffers += ` AND car_type = '${body.carType}'`;
   }
-  console.log(matchingOffers);
+
+  if (body.onlyVollkasko !== undefined) {
+    matchingOffers += ` AND has_vollkasko = ${body.onlyVollkasko}`;
+  }
+
+  if (body.minFreeKilometer !== undefined) {
+    matchingOffers += ` AND free_kilometers >= ${body.minFreeKilometer}`;
+  }
+
+  // Add ordering, pagination, and final parts of the query
+  if (body.sortOrder) {
+    matchingOffers += ` ORDER BY ${body.sortOrder}`;
+  }
+
+  if (body.pageSize) {
+    matchingOffers += ` LIMIT ${body.pageSize}`;
+  }
+
+  // Log for debugging purposes
+  console.log("Query: ", matchingOffers);
+
   const priceRanges = `SELECT max(price), min(price), Count(*) FROM offers GROUP BY price`;
 
   const carTypeCounts = `SELECT car_type, Count(*) FROM offers GROUP BY car_type`;
