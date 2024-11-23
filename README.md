@@ -1,10 +1,15 @@
-# Elysia with Bun runtime
+# Launch the app
 
 ## Requirements
 
 - bun
 - typescript
 - pm2
+
+You can launch the app using
+`docker compose up`
+
+Use the flag `-d` for detached mode (no blocking in terminal) and `--build` if you don't want to cache the containers (important if you made config changes).
 
 ## Some useful PM2 commands
 
@@ -38,4 +43,7 @@ To start the development server run:
 bun run dev
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+# Open http://localhost:3000/ with your browser to see the result.
+
+You can log in and play with the DB container
+`docker exec -it backend-db-1 psql -U postgres -d rental_db`.
