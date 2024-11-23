@@ -36,7 +36,7 @@ const app = new Elysia({
       const validatedParams = parseQueryParams(query);
       const lo = testGet(validatedParams);
       console.log("################################");
-      console.log(lo);
+      lo.then((res) => console.log(res));
 
       return lo;
     },
