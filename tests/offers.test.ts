@@ -1,7 +1,6 @@
 import { describe, expect, test, beforeAll } from "bun:test";
 import request from "supertest";
-
-const API_URL = "http://localhost:80";
+import { API_URL } from "./constants";
 
 // Test data helpers
 const generateTestOffer = () => ({
