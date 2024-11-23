@@ -11,7 +11,7 @@ export async function getOffers(body: typeof requestGetOffers) {
     ${body.timeRangeStart},
     ${body.timeRangeEnd},
     ${body.numberDays},
-    ${body.sortOrder},
+    '${body.sortOrder}',
     ${body.page},
     ${body.pageSize},
     ${body.priceRangeWidth},
