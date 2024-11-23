@@ -38,8 +38,8 @@ const app = new Elysia({
       return getOffers(validatedParams);
     },
     {
-      //validatedParams: requestGetOffers,
-      //response: responseGetOffers,
+      validatedParams: requestGetOffers,
+      response: responseGetOffers,
     }
   )
   .post(
