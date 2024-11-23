@@ -18,6 +18,9 @@ You can log in and play with the DB container
 Start the application with docker compose (above).
 
 Then you can execute the tests with `bun test` in the root directory.
+
+You can execute singular tests with the `-t` flag followed by the test name in double quotes (in bun output after '>' and before the squared brackets indicating execution time).
+
 ## Manually Testing the routes 
 When you use the docker compose setup, you can post with e.g. this
 ```
