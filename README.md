@@ -16,8 +16,10 @@ pm2 stop backend # Stop the app
 pm2 delete backend # Remove the app from PM2
 ```
 
--> Launch the backend initially with
-`pm2 start pm2.config.js`
+- Launch the backend initially with:
+  ```
+  pm2 start bun --name "backend" -- --bun -- run start
+  ```
 
 ## Getting Started
 
