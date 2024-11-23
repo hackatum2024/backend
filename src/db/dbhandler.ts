@@ -3,30 +3,38 @@ import { requestGetOffers, requestPostOffers } from "../schema";
 import { sequelize } from "./dbconnect";
 import { regionService } from "..";
 import { logger } from "../utils/logger";
+import { QueryTypes } from "sequelize";
 
 export async function getOffers(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
   const query = `SELECT get_offers(
-    ARRAY[${regionIds}],
-    ${body.timeRangeStart},
-    ${body.timeRangeEnd},
-    ${body.numberDays},
-    '${body.sortOrder}',
-    ${body.page},
-    ${body.pageSize},
-    ${body.priceRangeWidth},
-    ${body.minNumberSeats ?? "NULL"},
-    ${body.minPrice ?? "NULL"},
-    ${body.maxPrice ?? "NULL"},
-    ${body.carType ?? "NULL"},
-    ${body.onlyVollkasko ?? "NULL"},
-    ${body.minFreeKilometer ?? "NULL"},
-    ${body.minFreeKilometerWidth}
-  )`;
+    ARRAY[${regionIds}]::integer[],
+    ${body.timeRangeStart}::bigint,
+    ${body.timeRangeEnd}::bigint,
+    ${body.numberDays}::integer,
+    '${body.sortOrder}'::text,
+    ${body.page}::integer,
+    ${body.pageSize}::integer,
+    ${body.priceRangeWidth}::integer,
+    ${body.minNumberSeats ?? "NULL"}::integer,
+    ${body.minPrice ?? "NULL"}::numeric,
+    ${body.maxPrice ?? "NULL"}::numeric,
+    ${body.carType ? `'${body.carType}'` : "NULL"}::text,
+    ${body.onlyVollkasko ?? "NULL"}::boolean,
+    ${body.minFreeKilometer ?? "NULL"}::integer,
+    ${body.minFreeKilometerWidth}::integer
+  ) as result`;
 
   logger.info(`creating for body ${body} this query: ${query}`);
-  const result = await sequelize.query(query);
-  return result;
+
+  const [rows] = await sequelize.query(query, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  // the function returns a single JSONB column, so get the 'result' field
+  // typeScript type assertion since we know the structure
+  return (rows as any).result;
 }
 
 export async function postOffer(body: typeof requestPostOffers) {
