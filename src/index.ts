@@ -44,13 +44,14 @@ const app = new Elysia({
   )
   .post(
     "/api/offers",
-    ({ body }) => {
+    ({ body, set }) => {
+      set.status = 201;
       return postOffer(body);
     },
     { body: requestPostOffers }
   )
-  .delete("/api/offers", () => {
-    // Logic to delete all offers can go here
+  .delete("/api/offers", ({ body, set }) => {
+    set.status = 204;
     return cleanUp();
   })
 

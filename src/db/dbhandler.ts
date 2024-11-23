@@ -62,8 +62,9 @@ export async function postOffer(body: typeof requestPostOffers) {
       freeKilometers: offerData.freeKilometers,
     });
 
-    console.log("Created offer:", offer.id);
-    return offer;
+
+    console.log('Created offer:', offer.id);
+    return offer.toJSON();
   } catch (error) {
     console.error("Error creating offer:", error);
     throw error; // Re-throw the error to be handled by the route handler
