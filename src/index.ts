@@ -40,7 +40,7 @@ const app = new Elysia({
     {
       validatedParams: requestGetOffers,
       response: responseGetOffers,
-    },
+    }
   )
   .post(
     "/api/offers",
@@ -48,7 +48,7 @@ const app = new Elysia({
       set.status = 201;
       return postOffer(body);
     },
-    { body: requestPostOffers },
+    { body: requestPostOffers }
   )
   .delete("/api/offers", ({ body, set }) => {
     set.status = 204;

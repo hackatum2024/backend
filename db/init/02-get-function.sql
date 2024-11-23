@@ -36,13 +36,14 @@ WITH filtered_offers AS (
 paginated_offers AS (
     SELECT 
         ro.id::text as id,  -- Explicitly convert UUID to text
-        ro.data
+        ro.data,
+        ro.price  -- Added for sorting
     FROM filtered_offers ro
     ORDER BY 
-        CASE WHEN p_sort_order = 'price-asc' THEN ro.price END ASC,
-        CASE WHEN p_sort_order = 'price-asc' THEN ro.id::text END ASC,
-        CASE WHEN p_sort_order = 'price-desc' THEN ro.price END DESC,
-        CASE WHEN p_sort_order = 'price-desc' THEN ro.id::text END ASC
+        CASE WHEN p_sort_order = 'price-asc' THEN price END ASC NULLS LAST,
+        CASE WHEN p_sort_order = 'price-asc' THEN id::text END ASC,
+        CASE WHEN p_sort_order = 'price-desc' THEN price END DESC NULLS LAST,
+        CASE WHEN p_sort_order = 'price-desc' THEN id::text END ASC
     LIMIT p_page_size
     OFFSET (p_page * p_page_size)
 ),
