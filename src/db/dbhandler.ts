@@ -101,17 +101,17 @@ export async function testGet(body: typeof requestGetOffers) {
   LIMIT ${body.pageSize} 
   `;
 
-  const priceRanges = `SELECT max(price), min(price), Count(*) FROM matchingOffers GROUP BY price`;
+  const priceRanges = `SELECT max(price), min(price), Count(*) FROM offers GROUP BY price`;
 
-  const carTypeCounts = `SELECT car_type, Count(*) FROM matchingOffers GROUP BY car_type`;
+  const carTypeCounts = `SELECT car_type, Count(*) FROM offers GROUP BY car_type`;
 
-  const seatsCount = `SELECT number_seats, Count(*) FROM matchingOffers GROUP BY number_seats`;
+  const seatsCount = `SELECT number_seats, Count(*) FROM offers GROUP BY number_seats`;
 
-  const freeKilometerRange = `SELECT max(free_kilometers), min(free_kilometers), Count(*) FROM matchingOffers GROUP BY free_kilometers`;
+  const freeKilometerRange = `SELECT max(free_kilometers), min(free_kilometers), Count(*) FROM offers GROUP BY free_kilometers`;
 
-  const vollkaskoCount = `SELECT has_vollkasko, Count(*) FROM matchingOffers GROUP BY has_vollkasko`;
+  const vollkaskoCount = `SELECT has_vollkasko, Count(*) FROM offers GROUP BY has_vollkasko`;
 
-  const onlyGetIDandData = `SELECT ID, data FROM matchingOffers`;
+  const onlyGetIDandData = `SELECT ID, data FROM offers`;
 
   const [offers] = await sequelize.query(matchingOffers, {
     type: QueryTypes.SELECT,
