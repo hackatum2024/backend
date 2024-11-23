@@ -38,16 +38,16 @@ const app = new Elysia({
       return getOffers(validatedParams);
     },
     {
-      validatedParams: requestGetOffers,
-      response: responseGetOffers,
-    },
+      //validatedParams: requestGetOffers,
+      //response: responseGetOffers,
+    }
   )
   .post(
     "/api/offers",
     ({ body }) => {
       return postOffer(body);
     },
-    { body: requestPostOffers },
+    { body: requestPostOffers }
   )
   .delete("/api/offers", () => {
     // Logic to delete all offers can go here
