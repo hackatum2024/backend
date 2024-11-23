@@ -1,8 +1,8 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
-import { getOffers, postOffer, cleanUp } from "./db/dbhandler";
+import { getOffers, postOffer, cleanUp} from "./db/dbhandler";
 import { logger } from "./utils/logger";
-import { requestGetOffers, responseGetOffers, requestPostOffers } from "./schema";
+import { requestGetOffers, responseGetOffers, requestPostOffers, parseQueryParams } from "./schema";
 const app = new Elysia({
   serve: {
     port: 80,
@@ -18,10 +18,11 @@ const app = new Elysia({
     return { message: "Welcome to the Car Rental API" };
   })
   .get('/api/offers', ({ query }) => {
-    let response = getOffers(query);
-    return response;
+    const validatedParams = parseQueryParams(query);
+
+    return getOffers(validatedParams);
   }, {
-    //query: requestGetOffers,
+    validatedParams: requestGetOffers,
     response: responseGetOffers
   })
   .post("/api/offers", ({body}) => {
