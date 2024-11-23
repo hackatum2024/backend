@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
-import { sequelize } from '../dbhandler'
+//import { sequelize } from '../dbhandler'
 
-
+/*
 export class RentalOffer extends Model {
     declare id: string
     declare data: string
@@ -64,4 +64,4 @@ RentalOffer.init({
     { fields: ['carType'] },
     { fields: ['price'] }
   ]
-})
+})*/
