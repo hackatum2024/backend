@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
-import { getOffers, postOffer, cleanUp } from "./db/dbhandler";
+import { getOffers, postOffer, cleanUp, testGet } from "./db/dbhandler";
 import { logger } from "./utils/logger";
 
 import { RegionService } from "./utils/regions/region";
@@ -35,7 +35,7 @@ const app = new Elysia({
     ({ query }) => {
       const validatedParams = parseQueryParams(query);
 
-      return getOffers(validatedParams);
+      return testGet(validatedParams);
     },
     {
       validatedParams: requestGetOffers,
@@ -45,13 +45,13 @@ const app = new Elysia({
   .post(
     "/api/offers",
     ({ body, set }) => {
-      set.status = 201;
+      set.status = 200;
       return postOffer(body);
     },
     { body: requestPostOffers }
   )
   .delete("/api/offers", ({ body, set }) => {
-    set.status = 204;
+    set.status = 200;
     return cleanUp();
   })
 
