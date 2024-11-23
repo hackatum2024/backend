@@ -122,7 +122,7 @@ export async function testGet(body: typeof requestGetOffers) {
       ""
     );
   }
-
+  console.log(matchingOffers);
   const priceRanges = `SELECT max(price), min(price), Count(*) FROM offers GROUP BY price`;
 
   const carTypeCounts = `SELECT car_type, Count(*) FROM offers GROUP BY car_type`;
