@@ -1,36 +1,29 @@
-import { Pool } from "pg";
-import { type PoolConfig } from "pg";
+import { Sequelize } from 'sequelize';
 
-const dbConfig: PoolConfig = {
-  user: "postgres",
-  host: "localhost",
-  database: "car_rental",
-  password: "postgres",
-  port: 5432,
-  // maximum number of clients in the pool
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-};
-
-export const sequelize = new Sequelize('car_rental', 'postgres', 'postgres', {
-  host: 'localhost',
+// Single Sequelize instance for the whole app
+export const sequelize = new Sequelize('rental_db', 'postgres', 'postgres', {
+  host: 'db',  // This matches the service name in docker-compose
   dialect: 'postgres',
-  port: 5432
-})
+  port: 5432,
+  pool: {
+    max: 20,
+    idle: 30000,
+    acquire: 60000,
+  },
+  logging: true
+});
 
-const pool = new Pool(dbConfig);
-
-async function testConnection() {
+// Simple test function
+export async function testConnection() {
   try {
-    const client = await pool.connect();
-    console.log("Connected to database");
-    client.release();
+    await sequelize.authenticate();
+    console.log('✅ Database connected successfully');
     return true;
-  } catch (err) {
-    console.log("Error connecting to database", err);
+  } catch (error) {
+    console.error('❌ Unable to connect to the database:', error);
     return false;
   }
 }
 
+// Test the connection
 await testConnection();
