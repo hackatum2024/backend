@@ -34,7 +34,7 @@ const app = new Elysia({
     "/api/offers",
     ({ query }) => {
       const validatedParams = parseQueryParams(query);
-      return getOffers(validatedParams);
+      return testGet(validatedParams);
     },
     {
       // validatedParams: requestGetOffers,
