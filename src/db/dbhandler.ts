@@ -92,15 +92,15 @@ export async function testGet(body: typeof requestGetOffers) {
 
   // Dynamically add filters only if they are defined
   if (body.timeRangeStart !== undefined) {
-    matchingOffers += ` AND start_date >= ${body.timeRangeStart}`;
+    matchingOffers += ` AND startDate >= ${body.timeRangeStart}`;
   }
 
   if (body.timeRangeEnd !== undefined) {
-    matchingOffers += ` AND end_date <= ${body.timeRangeEnd}`;
+    matchingOffers += ` AND endDate <= ${body.timeRangeEnd}`;
   }
 
   if (body.minNumberSeats !== undefined) {
-    matchingOffers += ` AND number_seats >= ${body.minNumberSeats}`;
+    matchingOffers += ` AND numberSeats >= ${body.minNumberSeats}`;
   }
 
   if (body.minPrice !== undefined) {
@@ -112,15 +112,15 @@ export async function testGet(body: typeof requestGetOffers) {
   }
 
   if (body.carType !== undefined) {
-    matchingOffers += ` AND car_type = '${body.carType}'`;
+    matchingOffers += ` AND carType = '${body.carType}'`;
   }
 
   if (body.onlyVollkasko !== undefined) {
-    matchingOffers += ` AND has_vollkasko = ${body.onlyVollkasko}`;
+    matchingOffers += ` AND hasVollkasko = ${body.onlyVollkasko}`;
   }
 
   if (body.minFreeKilometer !== undefined) {
-    matchingOffers += ` AND free_kilometers >= ${body.minFreeKilometer}`;
+    matchingOffers += ` AND freeKilometers >= ${body.minFreeKilometer}`;
   }
 
   // Add ordering, pagination, and final parts of the query
