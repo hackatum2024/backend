@@ -14,7 +14,11 @@ Use the flag `-d` for detached mode (no blocking in terminal) and `--build` if y
 You can log in and play with the DB container
 `docker exec -it backend-db-1 psql -U postgres -d rental_db`.
 
-## Testing the routes 
+## Automated testing
+Start the application with docker compose (above).
+
+Then you can execute the tests with `bun test` in the root directory.
+## Manually Testing the routes 
 When you use the docker compose setup, you can post with e.g. this
 ```
 curl -X POST \
