@@ -67,14 +67,21 @@ export async function postOffer(body: typeof requestPostOffers) {
     return offer.toJSON();*/
 
     console.log("body", body);
+
+    for (let i = 0; i < body.offers.length; i++) {
+      const offerData = body.offers[i];
+      const query = `INSERT INTO rental_offers (id, data, "mostSpecificRegionID", "startDate", "endDate", "numberSeats", price, "carType", "hasVollkasko", "freeKilometers") VALUES (' ${offerData.id} ,${offerData.data}', ${offerData.mostSpecificRegionID}, '${offerData.startDate}', '${offerData.endDate}', ${offerData.numberSeats}, ${offerData.price}, '${offerData.carType}', ${offerData.hasVollkasko}, ${offerData.freeKilometers}) RETURNING *`;
+
+      console.log("Created offer:", offerData.id);
+      const [offer] = await sequelize.query(query, {
+        type: QueryTypes.SELECT,
+        raw: true,
+      });
+      console.log("Created offer:", offer);
+    }
     // Create a sql query to insert the offer
-    const query = `INSERT INTO rental_offers (data, "mostSpecificRegionID", "startDate", "endDate", "numberSeats", price, "carType", "hasVollkasko", "freeKilometers") VALUES ('${body.data}', ${body.mostSpecificRegionID}, '${body.startDate}', '${body.endDate}', ${body.numberSeats}, ${body.price}, '${body.carType}', ${body.hasVollkasko}, ${body.freeKilometers}) RETURNING *`;
 
     // Execute the query with sequelize
-    const [offer] = await sequelize.query(query, {
-      type: QueryTypes.SELECT,
-      raw: true,
-    });
   } catch (error) {
     console.error("Error creating offer:", error);
     throw error; // Re-throw the error to be handled by the route handler
