@@ -21,7 +21,7 @@ export async function getOffers(body: typeof requestGetOffers) {
     ${body.carType ?? "NULL"},
     ${body.onlyVollkasko ?? "NULL"},
     ${body.minFreeKilometer ?? "NULL"},
-    ${body.minFreeKilometerWidth},
+    ${body.minFreeKilometerWidth}
   )`;
 
   logger.info(`creating for body ${body} this query: ${query}`);
