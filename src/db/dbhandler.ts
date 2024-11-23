@@ -137,15 +137,14 @@ export async function testGet(body: typeof requestGetOffers) {
     matchingOffers += ` LIMIT ${body.pageSize}`;
   }
 
-  const offers = await client.query(matchingOffers);
+  const offers = await sequelize.query(matchingOffers, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
 
-  console.log("######################");
-  console.log(offers.rows);
+  console.log("###################################", offers);
 
   return {
     offers: offers,
-    priceRanges: [],
-    carTypeCounts: {},
-    seatsCount: [],
   };
 }
