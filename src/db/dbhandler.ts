@@ -102,23 +102,23 @@ export async function testGet(body: typeof requestGetOffers) {
   `;
 
   if (body.minNumberSeats === undefined) {
-    matchingOffers.replace("AND number_seats >= ${body.minNumberSeats}", "");
+    matchingOffers.replace(`AND number_seats >= ${body.minNumberSeats}`, "");
   }
   if (body.minPrice === undefined) {
-    matchingOffers.replace("AND price >= ${body.minPrice}", "");
+    matchingOffers.replace(`AND price >= ${body.minPrice}`, "");
   }
   if (body.maxPrice === undefined) {
-    matchingOffers.replace("AND price <= ${body.maxPrice}", "");
+    matchingOffers.replace(`AND price <= ${body.maxPrice}`, "");
   }
   if (body.carType === undefined) {
-    matchingOffers.replace("AND car_type = ${body.carType}", "");
+    matchingOffers.replace(`AND car_type = ${body.carType}`, "");
   }
   if (body.onlyVollkasko === undefined) {
-    matchingOffers.replace("AND has_vollkasko = ${body.onlyVollkasko}", "");
+    matchingOffers.replace(`AND has_vollkasko = ${body.onlyVollkasko}`, "");
   }
   if (body.minFreeKilometer === undefined) {
     matchingOffers.replace(
-      "AND free_kilometers >= ${body.minFreeKilometer}",
+      `AND free_kilometers >= ${body.minFreeKilometer}`,
       ""
     );
   }
