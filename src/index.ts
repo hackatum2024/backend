@@ -34,7 +34,7 @@ const app = new Elysia({
     "/api/offers",
     ({ query }) => {
       const validatedParams = parseQueryParams(query);
-
+      console.log(typeof validatedParams.timeRangeEnd);
       return testGet(validatedParams);
     },
     {

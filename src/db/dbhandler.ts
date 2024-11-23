@@ -92,11 +92,11 @@ export async function testGet(body: typeof requestGetOffers) {
 
   // Dynamically add filters only if they are defined
   if (body.timeRangeStart !== undefined) {
-    matchingOffers += ` AND start_date >= '${body.timeRangeStart}'`;
+    matchingOffers += ` AND start_date >= ${body.timeRangeStart}`;
   }
 
   if (body.timeRangeEnd !== undefined) {
-    matchingOffers += ` AND end_date <= '${body.timeRangeEnd}'`;
+    matchingOffers += ` AND end_date <= ${body.timeRangeEnd}`;
   }
 
   if (body.minNumberSeats !== undefined) {
