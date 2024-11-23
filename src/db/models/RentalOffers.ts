@@ -1,39 +1,41 @@
-import { Model, DataTypes } from 'sequelize'
-//import { sequelize } from '../dbhandler'
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../dbconnect';
 
-/*
 export class RentalOffer extends Model {
-    declare id: string
-    declare data: string
-    declare regionId: number
-    declare startDate: number
-    declare endDate: number
-    declare numberSeats: number
-    declare price: number
-    declare carType: string
-    declare hasVollkasko: boolean
-    declare freeKilometers: number
-    declare createdAt: Date
+  declare id: string;
+  declare data: string;
+  declare mostSpecificRegionID: number;
+  declare startDate: Date;
+  declare endDate: Date;
+  declare numberSeats: number;
+  declare price: number;
+  declare carType: string;
+  declare hasVollkasko: boolean;
+  declare freeKilometers: number;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 }
+
 RentalOffer.init({
   id: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
   data: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
-  regionId: {
+  mostSpecificRegionID: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
   startDate: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.DATE,
     allowNull: false
   },
   endDate: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.DATE,
     allowNull: false
   },
   numberSeats: {
@@ -45,7 +47,7 @@ RentalOffer.init({
     allowNull: false
   },
   carType: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   hasVollkasko: {
@@ -55,13 +57,17 @@ RentalOffer.init({
   freeKilometers: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
   sequelize,
-  indexes: [
-    { fields: ['startDate', 'endDate'] },
-    { fields: ['regionId'] },
-    { fields: ['carType'] },
-    { fields: ['price'] }
-  ]
-})*/
+  tableName: 'rental_offers',
+  timestamps: true
+});
