@@ -11,6 +11,35 @@ You can launch the app using
 
 Use the flag `-d` for detached mode (no blocking in terminal) and `--build` if you don't want to cache the containers (important if you made config changes).
 
+You can log in and play with the DB container
+`docker exec -it backend-db-1 psql -U postgres -d rental_db`.
+
+## Testing the routes 
+When you use the docker compose setup, you can post with e.g. this
+```
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "offers": [{
+      "ID": "1wwwwwwwwwwwwwwwwwwwwwwwwwwww23",
+      "data": "base64string",
+      "mostSpecificRegionID": 1,
+      "startDate": 1700745600000,
+      "endDate": 1700832000000,
+      "numberSeats": 5,
+      "price": 10,
+      "carType": "SUV",
+      "hasVollkasko": true,
+      "freeKilometers": 1000
+    }]
+  }' \
+  http://localhost:80/api/offers
+```
+and delete with 
+
+```
+curl -X DELETE http://localhost:80/api/offers
+```
 ## Some useful PM2 commands
 
 ```bash
@@ -44,6 +73,3 @@ bun run dev
 ```
 
 # Open http://localhost:3000/ with your browser to see the result.
-
-You can log in and play with the DB container
-`docker exec -it backend-db-1 psql -U postgres -d rental_db`.

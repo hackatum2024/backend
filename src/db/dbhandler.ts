@@ -1,5 +1,5 @@
 import { RentalOffer } from "./models/RentalOffers";
-import { requestGetOffers } from "../schema";
+import { requestGetOffers, requestPostOffers } from "../schema";
 
 export function getOffers(body: typeof requestGetOffers) {
   /*try {
@@ -28,28 +28,50 @@ export function getOffers(body: typeof requestGetOffers) {
   }
 }
 
-export async function postOffer(body) {
+export async function postOffer(body: requestPostOffers) {
   console.log("POST offer")
   try {
+    // Since the body contains an array of offers in the 'offers' property
+    const offers = body.offers;
+
+    // Assuming we're processing just the first offer for now
+    const offerData = offers[0];
+
+    // Convert timestamp to Date object if timestamp is provided
+    const startDate = new Date(offerData.startDate);
+    const endDate = new Date(offerData.endDate);
+
     const offer = await RentalOffer.create({
-      data: "Example car details",
-      mostSpecificRegionID: 1,
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      numberSeats: 5,
-      price: 10000, // in cents
-      carType: "SUV",
-      hasVollkasko: true,
-      freeKilometers: 1000
+      data: offerData.data,
+      mostSpecificRegionID: offerData.mostSpecificRegionID,
+      startDate: startDate,
+      endDate: endDate,
+      numberSeats: offerData.numberSeats,
+      price: offerData.price,
+      carType: offerData.carType,
+      hasVollkasko: offerData.hasVollkasko,
+      freeKilometers: offerData.freeKilometers
     });
+
     console.log('Created offer:', offer.id);
+    return offer;
   } catch (error) {
     console.error('Error creating offer:', error);
+    throw error; // Re-throw the error to be handled by the route handler
   }
 }
 
-
-export function cleanUp() {
-  return [];
+export async function cleanUp() {
+  console.log("Cleaning up offers");
+  try {
+    await RentalOffer.destroy({
+      where: {},  // empty where clause means delete all
+      truncate: true  // this resets the auto-incrementing primary key
+    });
+    console.log("Successfully cleaned up all offers");
+    return { success: true, message: "All offers have been cleaned up" };
+  } catch (error) {
+    console.error('Error cleaning up offers:', error);
+    throw error;
+  }
 }
-
