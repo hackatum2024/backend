@@ -125,8 +125,8 @@ export async function testGet(body: typeof requestGetOffers) {
 
   // Add ordering, pagination, and final parts of the query
   if (body.sortOrder) {
-    // sort order is a string, so we need to sanitize it either price-asc or price-desc
-    const sortOrder = body.sortOrder.split("-");
+    // make the string price-ask to price ASC, ask DESC
+    const sortOrder = body.sortOrder.replace("-", " ");
 
     matchingOffers += ` ORDER BY ${sortOrder}`;
   }
