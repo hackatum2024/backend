@@ -140,7 +140,7 @@ export async function testGet(body: typeof requestGetOffers) {
   const offers = await client.query(matchingOffers);
 
   console.log("######################");
-  console.log(offers);
+  console.log(offers.rows);
 
   return {
     offers: offers,
