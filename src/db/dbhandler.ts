@@ -101,6 +101,28 @@ export async function testGet(body: typeof requestGetOffers) {
   LIMIT ${body.pageSize} 
   `;
 
+  if (body.minNumberSeats === undefined) {
+    matchingOffers.replace("AND number_seats >= ${body.minNumberSeats}", "");
+  }
+  if (body.minPrice === undefined) {
+    matchingOffers.replace("AND price >= ${body.minPrice}", "");
+  }
+  if (body.maxPrice === undefined) {
+    matchingOffers.replace("AND price <= ${body.maxPrice}", "");
+  }
+  if (body.carType === undefined) {
+    matchingOffers.replace("AND car_type = ${body.carType}", "");
+  }
+  if (body.onlyVollkasko === undefined) {
+    matchingOffers.replace("AND has_vollkasko = ${body.onlyVollkasko}", "");
+  }
+  if (body.minFreeKilometer === undefined) {
+    matchingOffers.replace(
+      "AND free_kilometers >= ${body.minFreeKilometer}",
+      ""
+    );
+  }
+
   const priceRanges = `SELECT max(price), min(price), Count(*) FROM offers GROUP BY price`;
 
   const carTypeCounts = `SELECT car_type, Count(*) FROM offers GROUP BY car_type`;
