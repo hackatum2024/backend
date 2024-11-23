@@ -3,7 +3,7 @@ import { requestGetOffers, requestPostOffers } from "../schema";
 import { sequelize } from "./dbconnect";
 import { regionService } from "..";
 import { logger } from "../utils/logger";
-import { QueryTypes } from "sequelize";
+import { Op, fn, col, literal, QueryTypes } from "sequelize";
 
 export async function getOffers(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
@@ -62,8 +62,7 @@ export async function postOffer(body: typeof requestPostOffers) {
       freeKilometers: offerData.freeKilometers,
     });
 
-
-    console.log('Created offer:', offer.id);
+    console.log("Created offer:", offer.id);
     return offer.toJSON();
   } catch (error) {
     console.error("Error creating offer:", error);
@@ -84,4 +83,77 @@ export async function cleanUp() {
     console.error("Error cleaning up offers:", error);
     throw error;
   }
+}
+
+export async function testGet(body: typeof requestGetOffers) {
+  const regionIds = regionService.getSubregionIds(body.regionID);
+  const matchingOffers = `SELECT * FROM rental_offers 
+  WHERE most_specific_region_id = ANY(ARRAY[${regionIds}])  
+  AND start_date >= ${body.timeRangeStart}
+  AND end_date <= ${body.timeRangeEnd}
+  AND number_seats >= ${body.minNumberSeats}
+  AND price >= ${body.minPrice}
+  AND price <= ${body.maxPrice}
+  AND car_type = ${body.carType}
+  AND has_vollkasko = ${body.onlyVollkasko}
+  AND free_kilometers >= ${body.minFreeKilometer}
+  ORDER BY ${body.sortOrder}
+  LIMIT ${body.pageSize} 
+  `;
+
+  const priceRanges = `SELECT max(price), min(price), Count(*) FROM matchingOffers GROUP BY price`;
+
+  const carTypeCounts = `SELECT car_type, Count(*) FROM matchingOffers GROUP BY car_type`;
+
+  const seatsCount = `SELECT number_seats, Count(*) FROM matchingOffers GROUP BY number_seats`;
+
+  const freeKilometerRange = `SELECT max(free_kilometers), min(free_kilometers), Count(*) FROM matchingOffers GROUP BY free_kilometers`;
+
+  const vollkaskoCount = `SELECT has_vollkasko, Count(*) FROM matchingOffers GROUP BY has_vollkasko`;
+
+  const onlyGetIDandData = `SELECT ID, data FROM matchingOffers`;
+
+  const [offers] = await sequelize.query(matchingOffers, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [priceRanges2] = await sequelize.query(priceRanges, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [carTypeCounts2] = await sequelize.query(carTypeCounts, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [seatsCount2] = await sequelize.query(seatsCount, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [freeKilometerRange2] = await sequelize.query(freeKilometerRange, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [vollkaskoCount2] = await sequelize.query(vollkaskoCount, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  const [onlyGetIDandData2] = await sequelize.query(onlyGetIDandData, {
+    type: QueryTypes.SELECT,
+    raw: true,
+  });
+
+  return {
+    onlyGetIDandData2,
+    priceRanges2,
+    carTypeCounts2,
+    seatsCount2,
+    freeKilometerRange2,
+    vollkaskoCount2,
+  };
 }
