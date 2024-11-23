@@ -14,3 +14,7 @@ CREATE TABLE IF NOT EXISTS rental_offers (
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_rental_offers_region_price ON rental_offers ("mostSpecificRegionID", price);
+CREATE INDEX idx_rental_offers_dates ON rental_offers ("startDate", "endDate");
+CREATE INDEX idx_rental_offers_composite ON rental_offers ("mostSpecificRegionID", "startDate", "endDate", price);
