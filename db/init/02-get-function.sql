@@ -26,11 +26,14 @@ WITH filtered_offers AS (
         AND ro."endDate" <= to_timestamp(p_time_range_end::double precision / 1000)
         -- get the number of seconds of the difference
         AND (
-            EXTRACT(EPOCH FROM (
-                date_trunc('day', ro."endDate") - 
-                date_trunc('day', ro."startDate")
-            ))::integer / 86400
-        ) = p_number_days 
+            EXTRACT(DAY FROM ro."endDate"::timestamp) - 
+            EXTRACT(DAY FROM ro."startDate"::timestamp) +
+            (EXTRACT(YEAR FROM ro."endDate"::timestamp) - 
+             EXTRACT(YEAR FROM ro."startDate"::timestamp)) * 365 +
+            (EXTRACT(MONTH FROM ro."endDate"::timestamp) - 
+             EXTRACT(MONTH FROM ro."startDate"::timestamp)) * 30
+        ) = p_number_days
+
 
         -- Optional filters
         AND (p_min_number_seats IS NULL OR ro."numberSeats" >= p_min_number_seats)
