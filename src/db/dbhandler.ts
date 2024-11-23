@@ -61,7 +61,17 @@ export async function postOffer(body: requestPostOffers) {
   }
 }
 
-export function cleanUp() {
-  return [];
+export async function cleanUp() {
+  console.log("Cleaning up offers");
+  try {
+    await RentalOffer.destroy({
+      where: {},  // empty where clause means delete all
+      truncate: true  // this resets the auto-incrementing primary key
+    });
+    console.log("Successfully cleaned up all offers");
+    return { success: true, message: "All offers have been cleaned up" };
+  } catch (error) {
+    console.error('Error cleaning up offers:', error);
+    throw error;
+  }
 }
-
