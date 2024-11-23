@@ -45,7 +45,7 @@ const app = new Elysia({
   .post(
     "/api/offers",
     ({ body, set }) => {
-      set.status = 201;
+      set.status = 200;
       return postOffer(body);
     },
     { body: requestPostOffers },
