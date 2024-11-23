@@ -88,7 +88,7 @@ export async function cleanUp() {
 export async function testGet(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
   // Create the base query
-  let matchingOffers = `SELECT * FROM rental_offers WHERE most_specific_region_id = ANY(ARRAY[${regionIds}])`;
+  let matchingOffers = `SELECT * FROM rental_offers WHERE mostSpecificRegionID = ANY(ARRAY[${regionIds}])`;
 
   // Dynamically add filters only if they are defined
   if (body.timeRangeStart !== undefined) {
