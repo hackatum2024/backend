@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS rental_offers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     data TEXT NOT NULL,
