@@ -66,6 +66,7 @@ export async function postOffer(body: typeof requestPostOffers) {
     console.log("Created offer:", offer.id);
     return offer.toJSON();*/
 
+    console.log("body", body);
     // Create a sql query to insert the offer
     const query = `INSERT INTO rental_offers (data, "mostSpecificRegionID", "startDate", "endDate", "numberSeats", price, "carType", "hasVollkasko", "freeKilometers") VALUES ('${body.data}', ${body.mostSpecificRegionID}, '${body.startDate}', '${body.endDate}', ${body.numberSeats}, ${body.price}, '${body.carType}', ${body.hasVollkasko}, ${body.freeKilometers}) RETURNING *`;
 
