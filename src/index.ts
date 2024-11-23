@@ -2,11 +2,6 @@ import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { getOffers, postOffer, cleanUp } from "./db/dbhandler";
 import { logger } from "./utils/logger";
-import {
-  requestGetOffers,
-  responseGetOffers,
-  requestPostOffers,
-} from "./schema";
 
 import { RegionService } from "./utils/regions/region";
 
@@ -15,6 +10,12 @@ export const regionService = new RegionService();
 const jsonData = await Bun.file("src/utils/regions/regions.json").text();
 regionService.loadRegions(jsonData);
 
+import {
+  requestGetOffers,
+  responseGetOffers,
+  requestPostOffers,
+  parseQueryParams,
+} from "./schema";
 const app = new Elysia({
   serve: {
     port: 80,
@@ -31,21 +32,26 @@ const app = new Elysia({
   })
   .get(
     "/api/offers",
-    ({ body }) => {
-      // Logic to retrieve and return the offers based on requestBodySchema can go here
-      return getOffers(body);
+    ({ query }) => {
+      const validatedParams = parseQueryParams(query);
+
+      return getOffers(validatedParams);
     },
     {
-      body: requestGetOffers,
+      validatedParams: requestGetOffers,
       response: responseGetOffers,
     },
   )
-  .post("/api/offers", ({ body }) => {
-    return postOffer(body);
-  })
+  .post(
+    "/api/offers",
+    ({ body }) => {
+      return postOffer(body);
+    },
+    { body: requestPostOffers },
+  )
   .delete("/api/offers", () => {
     // Logic to delete all offers can go here
-    return { status: 200, message: "All offers deleted successfully" };
+    return cleanUp();
   })
 
   // @ts-ignore
@@ -59,4 +65,3 @@ const app = new Elysia({
 // });
 
 export default app;
-
