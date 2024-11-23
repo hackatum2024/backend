@@ -14,6 +14,7 @@ pm2 logs backend # View logs
 pm2 restart backend # Restart the app
 pm2 stop backend # Stop the app
 pm2 delete backend # Remove the app from PM2
+pm2 flush # Delete all logs
 ```
 
 - Launch the backend initially with:
