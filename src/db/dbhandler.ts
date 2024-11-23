@@ -85,6 +85,8 @@ export async function cleanUp() {
   }
 }
 
+// interface for the offers returned in the first query
+
 export async function testGet(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
   // Create the base query
@@ -138,59 +140,18 @@ export async function testGet(body: typeof requestGetOffers) {
   // Log for debugging purposes
   console.log("Query: ", matchingOffers);
 
-  const priceRanges = `SELECT max(price), min(price), Count(*) FROM offers GROUP BY price`;
-
-  const carTypeCounts = `SELECT car_type, Count(*) FROM offers GROUP BY car_type`;
-
-  const seatsCount = `SELECT number_seats, Count(*) FROM offers GROUP BY number_seats`;
-
-  const freeKilometerRange = `SELECT max(free_kilometers), min(free_kilometers), Count(*) FROM offers GROUP BY free_kilometers`;
-
-  const vollkaskoCount = `SELECT has_vollkasko, Count(*) FROM offers GROUP BY has_vollkasko`;
-
-  const onlyGetIDandData = `SELECT ID, data FROM offers`;
-
   const [offers] = await sequelize.query(matchingOffers, {
     type: QueryTypes.SELECT,
     raw: true,
   });
 
-  const [priceRanges2] = await sequelize.query(priceRanges, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
-
-  const [carTypeCounts2] = await sequelize.query(carTypeCounts, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
-
-  const [seatsCount2] = await sequelize.query(seatsCount, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
-
-  const [freeKilometerRange2] = await sequelize.query(freeKilometerRange, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
-
-  const [vollkaskoCount2] = await sequelize.query(vollkaskoCount, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
-
-  const [onlyGetIDandData2] = await sequelize.query(onlyGetIDandData, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
+  console.log("##################");
+  console.log(offers);
 
   return {
-    onlyGetIDandData2,
-    priceRanges2,
-    carTypeCounts2,
-    seatsCount2,
-    freeKilometerRange2,
-    vollkaskoCount2,
+    offers: offers,
+    priceRanges: [],
+    carTypeCounts: {},
+    seatsCount: [],
   };
 }
