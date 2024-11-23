@@ -4,7 +4,7 @@ import { sequelize } from "./dbconnect";
 import { regionService } from "..";
 import { logger } from "../utils/logger";
 import { Op, fn, col, literal, QueryTypes } from "sequelize";
-
+import { client } from "./dbconnect";
 export async function getOffers(body: typeof requestGetOffers) {
   const regionIds = regionService.getSubregionIds(body.regionID);
   const query = `SELECT get_offers(
@@ -137,13 +137,10 @@ export async function testGet(body: typeof requestGetOffers) {
     matchingOffers += ` LIMIT ${body.pageSize}`;
   }
 
-  // Log for debugging purposes
-  console.log("Query: ", matchingOffers);
+  const offers = await client.query(matchingOffers);
 
-  const [offers] = await sequelize.query(matchingOffers, {
-    type: QueryTypes.SELECT,
-    raw: true,
-  });
+  console.log("######################");
+  console.log(offers);
 
   return {
     offers: offers,

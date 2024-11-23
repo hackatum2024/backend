@@ -34,11 +34,7 @@ const app = new Elysia({
     "/api/offers",
     ({ query }) => {
       const validatedParams = parseQueryParams(query);
-      const lo = testGet(validatedParams);
-      console.log("################################");
-      lo.then((res) => console.log(res));
-
-      return lo;
+      return getOffers(validatedParams);
     },
     {
       // validatedParams: requestGetOffers,
